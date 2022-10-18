@@ -1,4 +1,5 @@
 from queue import Queue
+import State
 
 
 class Bfs:
@@ -8,7 +9,8 @@ class Bfs:
         self.goalState = str(123456789).zfill(10)
         self.fringe = Queue()
         self.explored = set()
-      #  self.neighbour = None
+
+    #  self.neighbour = None
 
     # append the init state to fringe list
     def algorithm(self):
@@ -25,3 +27,8 @@ class Bfs:
                     self.fringe.put(neighbour)
 
         return False
+
+
+if __name__ == '__main__':
+    state = State.State()
+    print("ana fe bfs now")
