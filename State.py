@@ -8,6 +8,7 @@ class State:
 
     def find_possible_moves(self):
         stringState = str(self.num)
+
         if(self.num < 100000000):
             stringState = '0' + stringState
         moves = [0, 0, 0, 0]
