@@ -11,7 +11,7 @@ import State
 
 if __name__ == '__main__':
     s1 = State.State()
-    s1.set_state(123456780)
+    s1.set_state([1,2,3,4,5,6,7,8,0])
     print(s1.find_neighbours())
     res = str(123456789).zfill(10)
     print(res)
