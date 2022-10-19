@@ -1,54 +1,67 @@
 import State
 import time
 
+
 class dfs:
 
-   def __init__(self , intialState ):
-        self.state = intialState
+    def __init__(self, initialState):
+        self.state = initialState
+        self.goalState = self.state.getGoalState()
         self.frontier = []
         self.explored = set()
-        self.parents = {}
+        self.parentMap = {}
         self.TempNeighbours = []
 
-   def Algoritm(self):
+    def algorithm(self):
 
         self.frontier.append(self.state.num)
-        self.parents.update({self.state.num : self.state.num})
+        self.parentMap.update({self.state.num: -1})
 
-        while self.frontier :
+        while self.frontier:
             currentNum = self.frontier.pop()
             currentState = State.State(currentNum)
             self.explored.add(currentNum)
-            print("Current state number is >>",currentNum)
+            print("Current state number is >>", currentNum)
 
-            if currentNum == 12345678 :
+            if currentState.isGoalState():
                 print("reacheddd heeeee")
-                return True
+                break
 
             for neighbour in currentState.find_neighbours():
-                if neighbour not in self.frontier :
-                    if neighbour not in self.explored :
-                      #  print("My neibhour is >>> ", neighbour)
+                if neighbour not in self.frontier:
+                    if neighbour not in self.explored:
+                        #  print("My neighbour is >>> ", neighbour)
                         self.TempNeighbours.append(neighbour)
 
             while self.TempNeighbours:
                 temp = self.TempNeighbours.pop()
                 self.frontier.append(temp)
-                self.parents.update({temp: currentNum})
+                self.parentMap.update({temp: currentNum})
 
-          #  print(self.frontier)
-            print(self.explored)
-            print(self.parents.items())
-        return False
+            #  print(self.frontier)
+            #  print(self.explored)
+            #  print(self.parentMap.items())
+        if self.goalState not in self.parentMap.keys():
+            return False
+        else:
+            state = self.goalState
+            path = []
+            while state != -1:
+                path.append(state)
+                state = self.parentMap[state]
+
+            path.reverse()
+            print("Path is ", path)
+            print("Cost is ", len(path) - 1)
+            return path
 
 
 if __name__ == '__main__':
     print("ana fe dfs now")
 
-
     s = State.State(312045678)
     search = dfs(s)
     startTime = time.time()
-    print("returned >>>>>>>>>>>>>",search.Algoritm())
-    end =  time.time()
-    print(end-startTime)
+    print("returned >>>>>>>>>>>>>", search.algorithm())
+    end = time.time()
+    print(end - startTime)
