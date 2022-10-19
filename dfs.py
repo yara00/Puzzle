@@ -1,5 +1,8 @@
 import State
 import time
+from collections import deque
+
+
 
 
 class dfs:
@@ -7,7 +10,7 @@ class dfs:
     def __init__(self, initialState):
         self.state = initialState
         self.goalState = self.state.getGoalState()
-        self.frontier = []
+        self.frontier = deque() #stack
         self.explored = set()
         self.parentMap = {}
         self.TempNeighbours = []
@@ -51,7 +54,7 @@ class dfs:
                 state = self.parentMap[state]
 
             path.reverse()
-            print("Path is ", path)
+         #   print("Path is ", path)
             print("Cost is ", len(path) - 1)
             return path
 
@@ -59,9 +62,9 @@ class dfs:
 if __name__ == '__main__':
     print("ana fe dfs now")
 
-    s = State.State(312045678)
+    s = State.State(125340678) #182043765
     search = dfs(s)
     startTime = time.time()
-    print("returned >>>>>>>>>>>>>", search.algorithm())
+    search.algorithm()
     end = time.time()
     print(end - startTime)
