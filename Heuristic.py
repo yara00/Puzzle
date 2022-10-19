@@ -27,5 +27,5 @@ class Heuristic:
     def getHeuristicCost(self,moveNum):
         string = str(moveNum)
         if(moveNum<1000000000):
-            string = string+'0'
+            string = '0' + string
         return self.getManhattenHeuristicCost(string)
