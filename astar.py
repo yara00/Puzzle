@@ -8,12 +8,14 @@ class AStarSearch:
     parentmap = {}
     frontierHeap = []
     frontierDict = {}
-    goalState = 12345678
+    goalState = 0
 
     def __init__(self):
         heapify(self.frontierHeap)
+        s= State.State(0)
+        self.goalState=s.getGoalState()
 
-    def find(self, startingStateNum):
+    def findPath(self, startingStateNum):
         h = Heuristic.Heuristic()
 
         # insert to frontier 2 data Structures
@@ -24,66 +26,74 @@ class AStarSearch:
         self.parentmap[startingStateNum] = (-1, 0)
 
         while (len(self.frontierHeap) != 0):
+
             # frontier.pull
             costToCurrent, currentStateNum = heappop(self.frontierHeap)
+            if currentStateNum in self.explored:
+                continue
             self.frontierDict.pop(currentStateNum)
-
+            # Create new state object to access state functions
             currentState = State.State(currentStateNum)
+            # Add to explored
             self.explored.add(currentStateNum)
+
+
             # check goal, change letter to fit the state
             if (currentState.isGoalState()):
-                print("found")
+                # print("found")
                 break
+
+            # actual cost is depth of the tree to the father
+            dummy, actualCost = self.parentmap[currentStateNum]
 
             # function to get neighbors
             for move in currentState.find_neighbours():
-                if move not in self.explored and move not in self.frontierDict:
-                    costToNext = costToCurrent + 1 + h.getHeuristicCost(moveNum=move)
+                if move not in self.explored and move not in self.frontierDict.keys():
+                    # calc new cost
+                    costToNext = actualCost + 1 + h.getHeuristicCost(moveNum=move)
 
                     # insert move to frontier and parent map
-                    # calc new cost
-
                     # insert to fronteir
                     heappush(self.frontierHeap, (costToNext, move))
                     self.frontierDict[move] = costToNext
                     # insert to parent map
-                    self.parentmap[move] = (currentStateNum, costToNext)
+                    self.parentmap[move] = (currentStateNum, actualCost+1)
 
                 elif move not in self.explored:
-                    costToNext = costToCurrent + 1 + h.getHeuristicCost(moveNum=move)
+                    costToNext = actualCost + 1 + h.getHeuristicCost(moveNum=move)
                     if costToNext < self.frontierDict[move]:
                         heappush(self.frontierHeap, (costToNext, move))
                         self.frontierDict[move] = costToNext
-                        self.parentmap[move] = currentState
-        print(len(self.frontierHeap))
+                        self.parentmap[move] = (currentStateNum,actualCost+1)
 
-        print("exited while loop")
-        if self.goalState not in self.parentmap:
-            print("did not find the goal")
-
-
+        if self.goalState not in self.parentmap.keys():
+            # print("didn't find goal state")
+            return []
         else:
             state = self.goalState
             path = []
             while state != -1:
-                print(state)
                 path.append(state)
                 state,x = self.parentmap[state]
 
-            # print("PARENT MAP")
-            # for p in self.parentmap:
-            #     print(str(p) + " " + str(self.parentmap[p]))
-            #
-            # print("FRONTIER DICT")
-            # for p in self.frontierDict:
-            #     print(str(p) + " " + str(self.frontierDict[p]))
-            #
-            # print("EXPLORED")
-            # for s in self.explored:
-            #     print(s)
+            path.reverse()
+            return path
+
+    def findPathAndDetails(self,startingStateNum):
+        return {
+            "path": self.findPath(startingStateNum),
+            "explored": self.explored
+        }
 
 
 if __name__ == '__main__':
-    start = State.State(102345678)
     Ast = AStarSearch()
-    Ast.find(startingStateNum=102345678)
+    ans = Ast.findPathAndDetails(startingStateNum=12345678)
+    # print("length of path")
+    # print(len(ans["path"])-1)
+    #
+    # print("explored sets number")
+    # print(len(ans["explored"]))
+    # #
+    # print(ans["path"])
+    # print(ans["explored"])
