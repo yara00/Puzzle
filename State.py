@@ -19,18 +19,18 @@ class State:
         moves = [0, 0, 0, 0]
         emptyPlace = stringState.index('0')  # find the empty place
         if (emptyPlace >= 0 and emptyPlace <= 5):  # Up Move
-            moves[0] = 3
+            moves[1] = 3
 
         if (emptyPlace >= 3 and emptyPlace <= 8):  # Down Move
-            moves[1] = -3
+            moves[0] = -3
 
         if (
                 emptyPlace == 0 or emptyPlace == 1 or emptyPlace == 3 or emptyPlace == 4 or emptyPlace == 6 or emptyPlace == 7):  # Left Move
-            moves[2] = 1
+            moves[3] = 1
 
         if (
                 emptyPlace == 2 or emptyPlace == 1 or emptyPlace == 5 or emptyPlace == 4 or emptyPlace == 8 or emptyPlace == 7):  # Right Move
-            moves[3] = -1
+            moves[2] = -1
 
         return moves
 
