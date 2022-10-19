@@ -1,34 +1,44 @@
 from queue import Queue
 import State
+import time
 
 
 class Bfs:
 
     def __init__(self, initialState):
         self.state = initialState
-        self.goalState = str(123456789).zfill(10)
+        self.goalState = 12345678
         self.fringe = Queue()
         self.explored = set()
 
-    #  self.neighbour = None
-
-    # append the init state to fringe list
     def algorithm(self):
-        self.fringe.put(self.state)
+        # append init state to fringe queue
+        self.fringe.put(self.state.num)
+
         while not self.fringe.empty():
-            self.state = self.fringe.get()
-            self.explored.add(self.state)
-            print("expolored ")
-            print(self.state)
-            if self.goalState is self.state:
-                return self.state
-            for neighbour in self.state.find_neighbours():
-                if neighbour not in self.fringe and self.explored:
+            currentStateNum = self.fringe.get()
+            currentState = State.State(currentStateNum)
+            # append current state to explored set
+            self.explored.add(currentStateNum)
+            print("explored ", currentStateNum)
+            # check goal state
+            if currentState.isGoalState():
+                return currentStateNum
+
+            # expand current state node
+            for neighbour in currentState.find_neighbours():
+                if neighbour not in self.explored and not self.fringe.queue:  # et2ky mn queue condition
+                    # append neighbour to fringe queue
                     self.fringe.put(neighbour)
 
         return False
 
 
 if __name__ == '__main__':
-    state = State.State()
+    state = State.State(125346780)
+    bfs = Bfs(state)
+    startTime = time.time_ns()
+    bfs.algorithm()
+    endTime = time.time_ns()
+    print(endTime - startTime)
     print("ana fe bfs now")
