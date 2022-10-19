@@ -4,6 +4,7 @@ import time
 
 
 class Bfs:
+    result = {}
 
     def __init__(self, initialState):
         self.state = initialState
@@ -13,6 +14,7 @@ class Bfs:
         self.parentMap = {}
 
     def algorithm(self):
+        startTime = time.time()
         # append init state to fringe queue
         self.fringe.put(self.state.num)
         self.parentMap.update({self.state.num: -1})
@@ -22,11 +24,8 @@ class Bfs:
             currentState = State.State(currentStateNum)
             # append current state to explored set
             self.explored.add(currentStateNum)
-
             # check goal state
             if currentState.isGoalState():
-                print("Expanded Len: ", len(self.explored) - 1)
-                print("Fringe Len: ", self.fringe.qsize())
                 break
 
             # expand current state node
@@ -47,15 +46,16 @@ class Bfs:
                 state = self.parentMap[state]
 
             path.reverse()
-            print("Path is ", path)
-            print("Cost is ", len(path) - 1)
-            return path
+            endTime = time.time()
+            result = dict({"Path": path, "Cost": len(path) - 1, "Expanded": len(self.explored) - 1,
+                           "Depth": 0, "Time": endTime - startTime})
+            return result
 
 
 if __name__ == '__main__':
-    s = State.State(125340678)
+    s = State.State(125348670)
     bfs = Bfs(s)
-    startTime = time.time_ns()
-    bfs.algorithm()
-    endTime = time.time_ns()
-    print(endTime - startTime)
+    # startTime = time.time_ns()
+    print(bfs.algorithm())
+    #  endTime = time.time_ns()
+    # print(endTime - startTime)
