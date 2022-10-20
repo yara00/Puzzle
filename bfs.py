@@ -22,49 +22,39 @@ class Bfs:
     def algorithm(self):
         startTime = time.time()
         # append init state to fringe queue
-        self.fringe.put(self.state.num)
-        self.parentMap.update({self.state.num: -1})
+        currentStateNum = self.state.num
+        self.fringe.put(currentStateNum)
+        self.parentMap.update({self.state.num: -1})  # add root of parent map
 
         while not self.fringe.empty():
+            pastStateNum = currentStateNum  # keep track of last state
             currentStateNum = self.fringe.get()
             currentState = State.State(currentStateNum)
-            path = self.getPath(currentStateNum)
-            depth = len(path)
-            self.maxDepth = max(depth, self.maxDepth)
-            # append current state to explored set
-            self.explored.add(currentStateNum)
+            self.explored.add(currentStateNum)  # append current state to explored set
+
             # check goal state
             if currentState.isGoalState():
-                break
+                # compare goal state depth with past state's to get max depth
+                path = self.getPath(currentStateNum)
+                pastPath = self.getPath(pastStateNum)
+                self.maxDepth = max(len(path), self.maxDepth, len(pastPath))
+                path.reverse()
+                endTime = time.time()
+                return {"path": path, "cost": len(path) - 1, "max depth": self.maxDepth,
+                        "expanded": len(self.explored) - 1, "time": endTime - startTime}
 
             # expand current state node
             for neighbour in currentState.find_neighbours():
-                if neighbour not in self.explored: # and neighbour not in self.fringe.queue:
+                if neighbour not in self.explored:
                     # append neighbour to fringe queue
                     self.fringe.put(neighbour)
                     self.parentMap.update({neighbour: currentStateNum})
 
         # unsolvable case
-        """
-        if self.goalState not in self.parentMap.keys():
-            return False
-        else:
-            state = self.goalState
-            path = []
-            while state != -1:
-                path.append(state)
-                state = self.parentMap[state]
-        """
-        path.reverse()
-        endTime = time.time()
-
-        return path, len(path) - 1, self.maxDepth, len(self.explored) - 1, endTime - startTime
+        return False
 
 
 if __name__ == '__main__':
-    s = State.State(125340678)
+    s = State.State(182043765)  # 125340678
     bfs = Bfs(s)
-    # startTime = time.time_ns()
     print(bfs.algorithm())
-    #  endTime = time.time_ns()
-    # print(endTime - startTime)
