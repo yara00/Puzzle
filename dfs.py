@@ -24,7 +24,7 @@ class dfs:
             currentNum = self.frontier.pop()
             currentState = State.State(currentNum)
             self.explored.add(currentNum)
-            print("Current state number is >>", currentNum)
+        #    print("Current state number is >>", currentNum)
 
             if currentState.isGoalState():
                 print("reacheddd heeeee")
