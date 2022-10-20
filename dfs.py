@@ -3,8 +3,6 @@ import time
 from collections import deque
 
 
-
-
 class dfs:
 
     def __init__(self, initialState):
@@ -15,8 +13,33 @@ class dfs:
         self.parentMap = {}
         self.TempNeighbours = []
 
-    def algorithm(self):
 
+    def get_path_and_cost(self,searchState):
+        state = searchState
+        path = []
+        while state != -1:
+            path.append(state)
+            state = self.parentMap[state]
+
+        path.reverse()
+        return path , len(path)-1
+
+    def get_Max_depth(self):
+       maxDepth = -10
+       print(self.parentMap.keys())
+       print(self.parentMap.values())
+       leafNodes = set(self.parentMap.keys()).difference(self.parentMap.values())
+       print(leafNodes)
+
+       for leaf in leafNodes:
+           x, depth = self.get_path_and_cost(leaf)
+           maxDepth = max(maxDepth,depth+1)
+
+       return maxDepth
+
+
+    def algorithm(self):
+        start = time.time()
         self.frontier.append(self.state.num)
         self.parentMap.update({self.state.num: -1})
 
@@ -24,16 +47,18 @@ class dfs:
             currentNum = self.frontier.pop()
             currentState = State.State(currentNum)
             self.explored.add(currentNum)
-        #    print("Current state number is >>", currentNum)
+          #  print("Current state number is >>", currentNum)
 
             if currentState.isGoalState():
-                print("reacheddd heeeee")
-                break
+                path, cost = self.get_path_and_cost(self.goalState)
+                maxDepth = self.get_Max_depth()
+                end= time.time()
+                print(self.parentMap)
+                return {"path": path, "cost": cost, "maxDepth": maxDepth, "expanded": len(self.explored), "time": end-start}
 
             for neighbour in currentState.find_neighbours():
                 if neighbour not in self.frontier:
                     if neighbour not in self.explored:
-                        #  print("My neighbour is >>> ", neighbour)
                         self.TempNeighbours.append(neighbour)
 
             while self.TempNeighbours:
@@ -41,30 +66,16 @@ class dfs:
                 self.frontier.append(temp)
                 self.parentMap.update({temp: currentNum})
 
-            #  print(self.frontier)
-            #  print(self.explored)
-            #  print(self.parentMap.items())
-        if self.goalState not in self.parentMap.keys():
-            return False
-        else:
-            state = self.goalState
-            path = []
-            while state != -1:
-                path.append(state)
-                state = self.parentMap[state]
+        maxDepth = self.get_Max_depth()
+        end = time.time()
+        return  {"path": [], "cost": 0, "maxDepth": maxDepth, "expanded": len(self.explored), "time": end-start}
 
-            path.reverse()
-         #   print("Path is ", path)
-            print("Cost is ", len(path) - 1)
-            return path
 
 
 if __name__ == '__main__':
-    print("ana fe dfs now")
-
-    s = State.State(125340678) #182043765
+    print("DFS")
+    s = State.State(142305678) #182043765        125340678       312045678
     search = dfs(s)
-    startTime = time.time()
-    search.algorithm()
-    end = time.time()
-    print(end - startTime)
+    print( search.algorithm())
+  #  search.algorithm()
+  #  search.get_Max_depth()
