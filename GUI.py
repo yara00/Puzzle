@@ -1,5 +1,3 @@
-import State
-
 import pygame
 from tiles import *
 TILESIZE = 128
@@ -20,19 +18,19 @@ class Game:
         pygame.display.set_caption("Puzzle Game")
     
     def create_game(self):
-        grid = [[0,1,2],[3,4,5],[6,7,8]]
+        grid = [0,1,2,3,4,5,6,7,8]
         
         return grid    
     
     def draw_tiles(self):
-        self.tiles = []
-        for row, x in enumerate(self.tiles_grid):
-            self.tiles.append([])
-            for col, tile in enumerate(x):
-                if tile != 0:
-                    self.tiles[row].append(Tile(self, col, row, str(tile)))
+        row =0
+        for col, x in enumerate(self.tiles_grid):
+                if col %3 == 0 and col != 0:
+                    row = row+1
+                if x != 0:
+                    Tile(self, col%3, row, str(x))
                 else:
-                    self.tiles[row].append(Tile(self, col, row, "empty"))
+                    Tile(self, col%3, row, "empty")
     
     
     def new(self):
@@ -41,6 +39,18 @@ class Game:
         self.buttons_list = []
         self.buttons_list.append(Button(500, 100, 200, 50, "Solve", WHITE, BLACK))
         self.buttons_list.append(Button(500, 170, 200, 50, "Reset", WHITE, BLACK))
+        self.boxes=[]
+        button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
+        button2 = Checkbox(self.screen, 800, 150, 1, caption='DFS' ,font_color= WHITE, font_size=30)
+        button3 = Checkbox(self.screen, 800, 200, 2, caption='A*',font_color= WHITE, font_size=30)
+        self.boxes.append(button)
+        self.boxes.append(button2)
+        self.boxes.append(button3)
+        self.user_text=''
+        self.base_font = pygame.font.Font(None,32)
+        self.input_txt = pygame.Rect(500,50,140,32)
+        font = pygame.font.SysFont("Consolas", 25)
+        self.text = font.render('Input', True,WHITE )
         self.draw_tiles()
     def run(self):
         self.playing = True
@@ -64,7 +74,14 @@ class Game:
         self.draw_grid()
         for button in self.buttons_list:
             button.draw(self.screen)
-        
+
+        for box in self.boxes:
+            box.render_checkbox()   
+        pygame.draw.rect(self.screen,WHITE,self.input_txt,2)
+        self.text_surface = self.base_font.render(self.user_text,True,(255,255,255))
+        self.screen.blit(self.text_surface,(self.input_txt.x+5,self.input_txt.y+5))
+        self.screen.blit(self.text,(500,18))
+        self.input_txt.w = 200
         pygame.display.flip()
         
 
@@ -80,12 +97,23 @@ class Game:
               for button in self.buttons_list:
                     if button.click(mouse_x, mouse_y):
                         if button.text == "Solve":
-                           # print("solve")
-                            self.shuffle_time = 0
-                            self.start_shuffle = True
+                            print("solve")
+                        
                         if button.text == "Reset":
                             self.new()
-
+              for box in self.boxes:
+                    box.update_checkbox(event)
+                    if box.checked is True:
+                        for b in self.boxes:
+                            if b != box:
+                                b.checked = False
+            if event.type == pygame.KEYDOWN:
+               
+                if event.key == pygame.K_BACKSPACE:
+                    self.user_text = self.user_text[:-1]
+                else:
+                   if (event.key == pygame.K_0 or event.key == pygame.K_1  or event.key ==pygame.K_2 or event.key ==pygame.K_3 or event.key ==pygame.K_4 or event.key ==pygame.K_5 or event.key ==pygame.K_6 or event.key ==pygame.K_7 or event.key ==pygame.K_8) and len(self.user_text)<9 : 
+                      self.user_text+= event.unicode                     
 game  = Game()
 while True:
     game.new()
