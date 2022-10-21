@@ -118,11 +118,12 @@ class Game:
                         if button.text == "Reset":
                             self.new()
                         if button.text == "Step forward":
-                           
-                            self.step+= 1
-                            self.tiles_grid = self.steps[self.step]
-                            print(self.step)
-                            self.draw_tiles()
+                         print (len(self.steps))  
+                         if self.step < len(self.steps)-1:
+                             self.step+= 1
+                             self.tiles_grid = self.steps[self.step]
+                             print(self.step)
+                             self.draw_tiles()
                         if button.text == "Step back":  
                             if self.step !=0: 
                               self.step-= 1  
