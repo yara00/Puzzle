@@ -6,6 +6,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARKGREY = (40, 40, 40)
 LIGHTGREY = (100, 100, 100)
+MINTGREEN =	(170, 240, 200)
 BGCOLOUR = DARKGREY
 pygame.font.init()
 
@@ -55,7 +56,7 @@ class Button:
 
 class Checkbox:
     def __init__(self, surface, x, y, idnum, color=(230, 230, 230),
-        caption="", outline_color=(0, 0, 0), check_color=(0, 0, 0),
+        caption="", outline_color=MINTGREEN, check_color=(0, 0, 0),
         font_size=22, font_color=(0, 0, 0), 
     text_offset=(28, 1), font='Ariel Black'):
         self.surface = surface

@@ -6,6 +6,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 DARKGREY = (40, 40, 40)
 LIGHTGREY = (100, 100, 100)
+MINTGREEN =	(170, 240, 200)
 BGCOLOUR = DARKGREY
 
 
@@ -37,8 +38,8 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.tiles_grid = self.create_game()   
         self.buttons_list = []
-        self.buttons_list.append(Button(500, 100, 200, 50, "Solve", WHITE, BLACK))
-        self.buttons_list.append(Button(500, 170, 200, 50, "Reset", WHITE, BLACK))
+        self.buttons_list.append(Button(500, 100, 200, 50, "Solve", MINTGREEN, BLACK))
+        self.buttons_list.append(Button(500, 170, 200, 50, "Reset", MINTGREEN, BLACK))
         self.boxes=[]
         button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
         button2 = Checkbox(self.screen, 800, 150, 1, caption='DFS' ,font_color= WHITE, font_size=30)
@@ -47,10 +48,10 @@ class Game:
         self.boxes.append(button2)
         self.boxes.append(button3)
         self.user_text=''
-        self.base_font = pygame.font.Font(None,32)
+        self.base_font = pygame.font.SysFont("Consolas", 24)
         self.input_txt = pygame.Rect(500,50,140,32)
         font = pygame.font.SysFont("Consolas", 25)
-        self.text = font.render('Input', True,WHITE )
+        self.text = font.render('Input', True,MINTGREEN )
         self.draw_tiles()
     def run(self):
         self.playing = True
