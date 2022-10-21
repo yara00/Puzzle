@@ -50,11 +50,11 @@ class dfs:
             self.maxDepth = max(depth, self.maxDepth)
             if currentState.isGoalState():
                 path, cost = self.get_path_and_cost(self.goalState)
-
+                self.maxDepth = max(len(path) - 1, self.maxDepth)
                 #  maxDepth = self.get_Max_depth()
                 end = time.time()
                # print(self.parentMap)
-                return {"path": path, "cost": cost, "maxDepth": self.maxDepth - 1, "expanded": len(self.explored),
+                return {"path": path, "cost": cost, "maxDepth": self.maxDepth, "expanded": len(self.explored) - 1,
                         "time": end - start}
             flag = True
             for neighbour in currentState.find_neighbours():
@@ -80,7 +80,7 @@ class dfs:
 
 if __name__ == '__main__':
     print("DFS")
-    s = State.State(125340678)  # 182043765        125340678       312045678
+    s = State.State(182043765)  # 182043765        125340678       312045678
     search = dfs(s)
     print(search.algorithm())
 #  search.algorithm()
