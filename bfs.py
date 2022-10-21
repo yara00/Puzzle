@@ -50,12 +50,17 @@ class Bfs:
                     # append neighbour to fringe queue
                     self.fringe.put(neighbour)
                     self.parentMap.update({neighbour: currentStateNum})
+
             pastStateNum = neighbour  # keep track of last state
+
         # unsolvable case
-        return {"path": [], "cost": 0, "maxDepth": 0, "expanded": 0, "time": 0}
+        path = self.getPath(currentStateNum)
+        self.maxDepth = len(path) - 1
+        return {"path": [], "cost": 0, "maxDepth": self.maxDepth,
+                "expanded": len(self.explored), "time": time.time() - startTime}
 
 
 if __name__ == '__main__':
-    s = State.State(12345678)  # 125340678
+    s = State.State(125340678)  # 125340678 182043765
     bfs = Bfs(s)
     print(bfs.algorithm())
