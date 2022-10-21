@@ -13,6 +13,7 @@ BGCOLOUR = DARKGREY
 
 
 class Game:
+    
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1100,641))
@@ -22,7 +23,14 @@ class Game:
         grid = [0,1,2,3,4,5,6,7,8]
         
         return grid    
-    
+    def solve (self,method):
+      #  print("Solve")
+      # print(method)
+           
+        self.steps = [[5,3,1,2,7,3,8,0,4],[5,3,1,2,7,3,0,8,4],[5,3,1,2,7,0,3,8,4]]
+        
+        self.tiles_grid = self.steps[self.step]
+     
     def draw_tiles(self):
         row =0
         for col, x in enumerate(self.tiles_grid):
@@ -38,8 +46,9 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.tiles_grid = self.create_game()   
         self.buttons_list = []
-        self.buttons_list.append(Button(500, 100, 200, 50, "Solve", MINTGREEN, BLACK))
-        self.buttons_list.append(Button(500, 170, 200, 50, "Reset", MINTGREEN, BLACK))
+        self.buttons_list.append(Button(500, 100, 200, 50, "Solve", MINTGREEN, BLACK,30))
+        self.buttons_list.append(Button(500, 170, 200, 50, "Reset", MINTGREEN, BLACK,30))
+        self.step = 0
         self.boxes=[]
         button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
         button2 = Checkbox(self.screen, 800, 150, 1, caption='DFS' ,font_color= WHITE, font_size=30)
@@ -98,10 +107,27 @@ class Game:
               for button in self.buttons_list:
                     if button.click(mouse_x, mouse_y):
                         if button.text == "Solve":
-                            print("solve")
-                        
+                           for method in self.boxes:
+                             if(method.checked == True): 
+                               self.solve(method.caption)
+                            
+                               self.buttons_list.append(Button(200, 400, 100, 50, "Step forward", MINTGREEN, BLACK,15))
+                               self.buttons_list.append(Button(50, 400, 100, 50, "Step back", MINTGREEN, BLACK,15))    
+                           #self.step+=1
+                               self.draw_tiles()
                         if button.text == "Reset":
                             self.new()
+                        if button.text == "Step forward":
+                           
+                            self.step+= 1
+                            self.tiles_grid = self.steps[self.step]
+                            print(self.step)
+                            self.draw_tiles()
+                        if button.text == "Step back":  
+                            if self.step !=0: 
+                              self.step-= 1  
+                              self.tiles_grid = self.steps[self.step]
+                              self.draw_tiles()    
               for box in self.boxes:
                     box.update_checkbox(event)
                     if box.checked is True:
@@ -116,6 +142,7 @@ class Game:
                    if (event.key == pygame.K_0 or event.key == pygame.K_1  or event.key ==pygame.K_2 or event.key ==pygame.K_3 or event.key ==pygame.K_4 or event.key ==pygame.K_5 or event.key ==pygame.K_6 or event.key ==pygame.K_7 or event.key ==pygame.K_8) and len(self.user_text)<9 : 
                       self.user_text+= event.unicode                     
 game  = Game()
+
 while True:
     game.new()
     game.run()

@@ -35,15 +35,16 @@ class Tile(pygame.sprite.Sprite):
         self.rect.y = self.y * TILESIZE      
           
 class Button:
-    def __init__(self, x, y, width, height, text, colour, text_colour):
+    def __init__(self, x, y, width, height, text, colour, text_colour ,font__size):
         self.colour, self.text_colour = colour, text_colour
         self.width, self.height = width, height
         self.x, self.y = x, y
         self.text = text
+        self.font__size = font__size
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.colour, (self.x, self.y, self.width, self.height))
-        font = pygame.font.SysFont("Consolas", 30)
+        font = pygame.font.SysFont("Consolas", self.font__size)
         text = font.render(self.text, True, self.text_colour)
         self.font_size = font.size(self.text)
         draw_x = self.x + (self.width / 2) - self.font_size[0] / 2
