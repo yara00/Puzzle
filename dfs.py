@@ -13,6 +13,7 @@ class dfs:
         self.parentMap = {}
         self.TempNeighbours = []
         self.maxDepth = 0
+        self.frontierDict = {}
 
 # function take a state and backtrack in the parentMap with this state to get the path from the intial state to this searchState
 # return the path and the cost
@@ -31,6 +32,7 @@ class dfs:
 
         # start with the intial state in the frontier and in the parent map
         self.frontier.append(self.state.num)
+        self.frontierDict[self.state.num] = 1
         self.parentMap.update({self.state.num: -1})
         depth = 0
 
@@ -51,7 +53,7 @@ class dfs:
             flag = True                     # to satisfy the depth
             for neighbour in currentState.find_neighbours():
                 if neighbour not in self.explored :
-
+                    if neighbour not in self.frontierDict.keys():
                         self.TempNeighbours.append(neighbour)
                         flag = False
 
@@ -63,6 +65,7 @@ class dfs:
             while self.TempNeighbours:              # reverse the states to maintain the same strategy
                 temp = self.TempNeighbours.pop()
                 self.frontier.append(temp)
+                self.frontierDict[temp] = 1
                 self.parentMap.update({temp: currentNum})
 
 
