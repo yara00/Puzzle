@@ -1,5 +1,6 @@
 import pygame
 from tiles import *
+from Controller import*
 TILESIZE = 128
 GAME_SIZE = 3
 WHITE = (255, 255, 255)
@@ -18,22 +19,39 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((1100,641))
         pygame.display.set_caption("Puzzle Game")
-    
+    def convert(self,num):
+       b = str(num)
+       c = []
+       if num < 100000000:
+        c.append(0)
+       for digit in b:
+          c.append (int(digit))
+
+       return c 
+
     def create_game(self):
-        grid = [0,1,2,3,4,5,6,7,8]
+        grid = 12345678
         
         return grid    
     def solve (self,method):
       #  print("Solve")
       # print(method)
-           
-        self.steps = [[5,3,1,2,7,3,8,0,4],[5,3,1,2,7,3,0,8,4],[5,3,1,0,7,3,2,8,4]]
-        
-        self.tiles_grid = self.steps[self.step]
+        ctrl = Controller()
+        for method in self.boxes:
+           if(method.checked == True):
+             ans = ctrl.solve(method.caption,int(self.user_text))
+        #print(ctrl.solve("bfs", 876543889))  
+             self.steps = ans["path"]
+             print(ans["path"])
+             print(len(self.steps))
+             self.nodesExplored = str(ans["expanded"])
+             self.pathLength= str(len(self.steps))
+             self.tiles_grid = self.convert(self.steps[self.step])
      
     def draw_tiles(self):
         row =0
         for col, x in enumerate(self.tiles_grid):
+                
                 if col %3 == 0 and col != 0:
                     row = row+1
                 if x != 0:
@@ -44,7 +62,7 @@ class Game:
     
     def new(self):
         self.all_sprites = pygame.sprite.Group()
-        self.tiles_grid = self.create_game()   
+        self.tiles_grid = self.convert(self.create_game())   
         self.buttons_list = []
         self.buttons_list.append(Button(500, 130, 200, 50, "Solve", MINTGREEN, BLACK,30))
         self.buttons_list.append(Button(500, 200, 200, 50, "Reset", MINTGREEN, BLACK,30))
@@ -133,16 +151,15 @@ class Game:
                         if button.text == "Reset":
                             self.new()
                         if button.text == "Step forward":
-                         print (len(self.steps))  
+                          
                          if self.step < len(self.steps)-1:
                              self.step+= 1
-                             self.tiles_grid = self.steps[self.step]
-                             print(self.step)
+                             self.tiles_grid = self.convert(self.steps[self.step])
                              self.draw_tiles()
                         if button.text == "Step back":  
                             if self.step !=0: 
                               self.step-= 1  
-                              self.tiles_grid = self.steps[self.step]
+                              self.tiles_grid = self.convert(self.steps[self.step])
                               self.draw_tiles()    
               for box in self.boxes:
                     box.update_checkbox(event)

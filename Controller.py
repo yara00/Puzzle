@@ -23,11 +23,11 @@ class Controller:
 
         state = State.State(initialState)
         result = 0
-        if method == "bfs":
+        if method == "BFS":
             result = bfs.Bfs(state).algorithm()
-        elif method == "dfs":
+        elif method == "DFS":
             result = dfs.dfs(state).algorithm()
-        elif method == "astar":
+        elif method == "A*":
             result = astar.AStarSearch().findPathAndDetails(initialState)
 
         return result
