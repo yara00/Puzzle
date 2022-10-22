@@ -50,9 +50,10 @@ class dfs:
 
             flag = True                     # to satisfy the depth
             for neighbour in currentState.find_neighbours():
-                if neighbour not in self.explored:
-                    self.TempNeighbours.append(neighbour)
-                    flag = False
+                if neighbour not in self.explored :
+
+                        self.TempNeighbours.append(neighbour)
+                        flag = False
 
             if flag:
                 depth = depth - 1
@@ -72,7 +73,7 @@ class dfs:
 
 if __name__ == '__main__':
     print("DFS")
-    s = State.State(182043765)  # 182043765        125340678       312045678
+    s = State.State(125340678)  # 182043765        125340678       312045678
     search = dfs(s)
     print(search.algorithm())
 
