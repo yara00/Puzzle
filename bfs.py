@@ -8,6 +8,7 @@ class Bfs:
         self.state = initialState
         self.goalState = self.state.getGoalState()
         self.fringe = Queue()
+        self.fringeDict = {}
         self.explored = set()
         self.parentMap = {}
         self.maxDepth = 0
@@ -26,6 +27,7 @@ class Bfs:
         pastStateNum = currentStateNum
         neighbour = 0
         self.fringe.put(currentStateNum)
+        self.fringeDict[currentStateNum] = 1
         self.parentMap.update({self.state.num: -1})  # add root of parent map
 
         while not self.fringe.empty():
@@ -46,9 +48,10 @@ class Bfs:
 
             # expand current state node
             for neighbour in currentState.find_neighbours():
-                if neighbour not in self.explored:
+                if neighbour not in self.explored and neighbour not in self.fringeDict.keys():
                     # append neighbour to fringe queue
                     self.fringe.put(neighbour)
+                    self.fringeDict[neighbour] = 1
                     self.parentMap.update({neighbour: currentStateNum})
 
             pastStateNum = neighbour  # keep track of last state
@@ -61,6 +64,6 @@ class Bfs:
 
 
 if __name__ == '__main__':
-    s = State.State(125340678)  # 125340678 182043765
+    s = State.State(812043765)  # 125340678 182043765 #812043765
     bfs = Bfs(s)
     print(bfs.algorithm())
