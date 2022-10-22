@@ -27,7 +27,7 @@ class Game:
       #  print("Solve")
       # print(method)
            
-        self.steps = [[5,3,1,2,7,3,8,0,4],[5,3,1,2,7,3,0,8,4],[5,3,1,2,7,0,3,8,4]]
+        self.steps = [[5,3,1,2,7,3,8,0,4],[5,3,1,2,7,3,0,8,4],[5,3,1,0,7,3,2,8,4]]
         
         self.tiles_grid = self.steps[self.step]
      
@@ -37,17 +37,17 @@ class Game:
                 if col %3 == 0 and col != 0:
                     row = row+1
                 if x != 0:
-                    Tile(self, col%3, row, str(x))
+                    Tile(self, (col%3)+0.39, row+0.39, str(x))
                 else:
-                    Tile(self, col%3, row, "empty")
+                    Tile(self, (col%3)+0.39, row+0.39, "empty")
     
     
     def new(self):
         self.all_sprites = pygame.sprite.Group()
         self.tiles_grid = self.create_game()   
         self.buttons_list = []
-        self.buttons_list.append(Button(500, 100, 200, 50, "Solve", MINTGREEN, BLACK,30))
-        self.buttons_list.append(Button(500, 170, 200, 50, "Reset", MINTGREEN, BLACK,30))
+        self.buttons_list.append(Button(500, 130, 200, 50, "Solve", MINTGREEN, BLACK,30))
+        self.buttons_list.append(Button(500, 200, 200, 50, "Reset", MINTGREEN, BLACK,30))
         self.step = 0
         self.boxes=[]
         button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
@@ -56,11 +56,16 @@ class Game:
         self.boxes.append(button)
         self.boxes.append(button2)
         self.boxes.append(button3)
+        self.bool = False
         self.user_text=''
+        self.nodesExplored ='5'
+        self.pathLength='6'
         self.base_font = pygame.font.SysFont("Consolas", 24)
-        self.input_txt = pygame.Rect(500,50,140,32)
+        self.input_txt = pygame.Rect(500,80,140,32)
         font = pygame.font.SysFont("Consolas", 25)
-        self.text = font.render('Input', True,MINTGREEN )
+        self.text = font.render('Input', True, MINTGREEN )
+        self.text_nodesExplored = font.render('Explored nodes:', True, MINTGREEN )
+        self.text_pathLength = font.render('Path Length: ', True, MINTGREEN ) 
         self.draw_tiles()
     def run(self):
         self.playing = True
@@ -74,9 +79,9 @@ class Game:
 
     def draw_grid(self):
         for row in range(-1, GAME_SIZE * TILESIZE, TILESIZE):
-            pygame.draw.line(self.screen,(100,100,100,100), (row, 0), (row, GAME_SIZE * TILESIZE))
+            pygame.draw.line(self.screen,(100,100,100,100), (row+50, 50), (row+50, (GAME_SIZE * TILESIZE)+50))
         for col in range(-1, GAME_SIZE * TILESIZE, TILESIZE):
-            pygame.draw.line(self.screen, (100,100,100,100), (0, col), (GAME_SIZE * TILESIZE, col)) 
+            pygame.draw.line(self.screen, (100,100,100,100), (50, col+50), ((GAME_SIZE * TILESIZE)+50, col+50)) 
    
     def draw(self):
         self.screen.fill((40,40,40,40))
@@ -89,8 +94,17 @@ class Game:
             box.render_checkbox()   
         pygame.draw.rect(self.screen,WHITE,self.input_txt,2)
         self.text_surface = self.base_font.render(self.user_text,True,(255,255,255))
+        self.text_surface2 = self.base_font.render(self.nodesExplored,True,(255,255,255))
+        self.text_surface3 = self.base_font.render(self.pathLength,True,(255,255,255))
+
         self.screen.blit(self.text_surface,(self.input_txt.x+5,self.input_txt.y+5))
-        self.screen.blit(self.text,(500,18))
+        
+        self.screen.blit(self.text,(500,48))
+        if self.bool:
+           self.screen.blit(self.text_nodesExplored,(500,300))
+           self.screen.blit(self.text_pathLength,(500,360))
+           self.screen.blit(self.text_surface2,(714,303))
+           self.screen.blit(self.text_surface3,(670,362))
         self.input_txt.w = 200
         pygame.display.flip()
         
@@ -110,10 +124,11 @@ class Game:
                            for method in self.boxes:
                              if(method.checked == True): 
                                self.solve(method.caption)
-                            
-                               self.buttons_list.append(Button(200, 400, 100, 50, "Step forward", MINTGREEN, BLACK,15))
-                               self.buttons_list.append(Button(50, 400, 100, 50, "Step back", MINTGREEN, BLACK,15))    
+                               self.bool = True
+                               self.buttons_list.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
+                               self.buttons_list.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
                            #self.step+=1
+                               
                                self.draw_tiles()
                         if button.text == "Reset":
                             self.new()
