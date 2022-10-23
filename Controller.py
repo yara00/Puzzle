@@ -27,9 +27,9 @@ class Controller:
             result = bfs.Bfs(state).algorithm()
         elif method == "DFS":
             result = dfs.dfs(state).algorithm()
-        elif method == "Manhattan":
+        elif method == "A* Manhatten":
             result = astar.AStarSearch().AlgorithmManhattanH(initialState)
-        elif method == "Euclidean":
+        elif method == "A* Euclidean":
             result = astar.AStarSearch().AlgorithmEuclideanH(initialState)
         return result
 
