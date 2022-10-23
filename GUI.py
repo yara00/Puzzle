@@ -36,6 +36,7 @@ class Game:
     def solve (self,method):
       #  print("Solve")
       # print(method)
+        #self.step=0
         ctrl = Controller()
         for method in self.boxes:
            if(method.checked == True):
@@ -68,6 +69,7 @@ class Game:
         self.buttons_list.append(Button(500, 200, 200, 50, "Reset", MINTGREEN, BLACK,30))
         self.step = 0
         self.boxes=[]
+        self.steps=[]
         button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
         button2 = Checkbox(self.screen, 800, 150, 1, caption='DFS' ,font_color= WHITE, font_size=30)
         button3 = Checkbox(self.screen, 800, 200, 2, caption='A*',font_color= WHITE, font_size=30)
@@ -76,8 +78,8 @@ class Game:
         self.boxes.append(button3)
         self.bool = False
         self.user_text=''
-        self.nodesExplored ='5'
-        self.pathLength='6'
+        self.nodesExplored =''
+        self.pathLength=''
         self.base_font = pygame.font.SysFont("Consolas", 24)
         self.input_txt = pygame.Rect(500,80,140,32)
         font = pygame.font.SysFont("Consolas", 25)
@@ -114,6 +116,8 @@ class Game:
         self.text_surface = self.base_font.render(self.user_text,True,(255,255,255))
         self.text_surface2 = self.base_font.render(self.nodesExplored,True,(255,255,255))
         self.text_surface3 = self.base_font.render(self.pathLength,True,(255,255,255))
+        self.text_surface4 = self.base_font.render(" / "+str(len(self.steps)),True,(255,255,255))
+        self.text_surface5 = self.base_font.render(str(self.step+1),True,(255,255,255))
 
         self.screen.blit(self.text_surface,(self.input_txt.x+5,self.input_txt.y+5))
         
@@ -123,6 +127,8 @@ class Game:
            self.screen.blit(self.text_pathLength,(500,360))
            self.screen.blit(self.text_surface2,(714,303))
            self.screen.blit(self.text_surface3,(670,362))
+           self.screen.blit(self.text_surface4,(215, 467))
+           self.screen.blit(self.text_surface5,(185,467))           
         self.input_txt.w = 200
         pygame.display.flip()
         
@@ -139,8 +145,10 @@ class Game:
               for button in self.buttons_list:
                     if button.click(mouse_x, mouse_y):
                         if button.text == "Solve":
+                           
                            for method in self.boxes:
                              if(method.checked == True): 
+                                 
                                self.solve(method.caption)
                                self.bool = True
                                self.buttons_list.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
