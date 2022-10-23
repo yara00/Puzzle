@@ -27,13 +27,14 @@ class Controller:
             result = bfs.Bfs(state).algorithm()
         elif method == "DFS":
             result = dfs.dfs(state).algorithm()
-        elif method == "A*":
-            result = astar.AStarSearch().findPathAndDetails(initialState)
-
+        elif method == "Manhattan":
+            result = astar.AStarSearch().AlgorithmManhattanH(initialState)
+        elif method == "Euclidean":
+            result = astar.AStarSearch().AlgorithmEuclideanH(initialState)
         return result
 
 
 if __name__ == '__main__':
     ctrl = Controller()
-    print(ctrl.solve("bfs", 876543889))
+    print(ctrl.solve("Euclidean", 102543678))
     print("ana t7t el control now")
