@@ -223,7 +223,7 @@ class Game:
                 if event.key == pygame.K_BACKSPACE:
                     self.user_text = self.user_text[:-1]
                 else:
-                   if (event.key == pygame.K_0 or event.key == pygame.K_1  or event.key ==pygame.K_2 or event.key ==pygame.K_3 or event.key ==pygame.K_4 or event.key ==pygame.K_5 or event.key ==pygame.K_6 or event.key ==pygame.K_7 or event.key ==pygame.K_8) and len(self.user_text)<9 : 
+                   if (event.key == pygame.K_0 or event.key == pygame.K_1  or event.key ==pygame.K_2 or event.key ==pygame.K_3 or event.key ==pygame.K_4 or event.key ==pygame.K_5 or event.key ==pygame.K_6 or event.key ==pygame.K_7 or event.key ==pygame.K_8 or event.key == pygame.K_KP_0 or event.key == pygame.K_KP_1  or event.key ==pygame.K_KP_2 or event.key ==pygame.K_KP_3 or event.key ==pygame.K_KP_4 or event.key ==pygame.K_KP_5 or event.key ==pygame.K_KP_6 or event.key ==pygame.K_KP_7 or event.key ==pygame.K_KP_8 ) and len(self.user_text)<9 : 
                       self.user_text+= event.unicode                     
 game  = Game()
 
