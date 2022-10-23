@@ -20,7 +20,6 @@ class AStarSearch:
 
     def findPath(self, startingStateNum,hNum):
         h = Heuristic.Heuristic()
-
         # insert to frontier 2 data Structures
         heappush(self.frontierHeap, (0, startingStateNum))
         self.frontierDict[startingStateNum] = 0
@@ -49,6 +48,7 @@ class AStarSearch:
             # check goal, change letter to fit the state
             if (currentState.isGoalState()):
                 # print("found")
+
                 break
 
             # function to get neighbors
@@ -87,7 +87,11 @@ class AStarSearch:
     def findPathAndDetails(self,startingStateNum,hNum):
         startTime = time.time()
         path = self.findPath(startingStateNum,hNum)
+
+
         endTime = time.time()
+        print(startTime)
+        print(endTime)
         return {
             "path": path,
             "explored": self.explored,
@@ -106,4 +110,4 @@ class AStarSearch:
 
 if __name__ == '__main__':
     Ast = AStarSearch()
-    ans = Ast.findPathAndDetails(12345678,0)
+    ans = Ast.findPathAndDetails(812043765,0)
