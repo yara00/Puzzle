@@ -19,6 +19,11 @@ class AStarSearch:
         self.goalState=s.getGoalState()
 
     def findPath(self, startingStateNum,hNum):
+        self.explored = set()
+        self.parentmap = {}
+        self.frontierHeap = []
+        self.frontierDict = {}
+        self.maxDepth = 0
         h = Heuristic.Heuristic()
         # insert to frontier 2 data Structures
         heappush(self.frontierHeap, (0, startingStateNum))
@@ -47,8 +52,6 @@ class AStarSearch:
 
             # check goal, change letter to fit the state
             if (currentState.isGoalState()):
-                # print("found")
-
                 break
 
             # function to get neighbors
@@ -72,7 +75,6 @@ class AStarSearch:
                         self.parentmap[move] = (currentStateNum,actualCost+1)
 
         if self.goalState not in self.parentmap.keys():
-            # print("didn't find goal state")
             return []
         else:
             state = self.goalState
@@ -87,16 +89,12 @@ class AStarSearch:
     def findPathAndDetails(self,startingStateNum,hNum):
         startTime = time.time()
         path = self.findPath(startingStateNum,hNum)
-
-
         endTime = time.time()
-        print(startTime)
-        print(endTime)
+
         return {
             "path": path,
-            "explored": self.explored,
             "cost": len(path) - 1,
-            "maxDepth":self.maxDepth,
+            "maxDepth": self.maxDepth,
             "expanded": len(self.explored) - 1,
             "time": endTime - startTime
         }

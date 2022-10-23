@@ -31,8 +31,7 @@ class Heuristic:
         string = str(moveNum)
         if(moveNum<1000000000):
             string = '0' + string
-
-        if(choice == 0):
+        if choice == 0:
             return self.getManhattenHeuristicCost(string)
         else:
             return self.getEuclideanHeuristicCost(string)
