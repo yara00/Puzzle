@@ -42,7 +42,9 @@ class Game:
            if(method.checked == True):
              ans = ctrl.solve(method.caption,int(self.user_text))
              if ans == "Invalid Input" :
-                self.new()
+              #  self.new()
+                self.invalid='Invalid Input'
+             
              else:   
         #print(ctrl.solve("bfs", 876543889))  
                self.steps = ans["path"]
@@ -50,10 +52,14 @@ class Game:
                print(len(self.steps))
                self.nodesExplored = str(ans["expanded"])
                self.pathLength= str(len(self.steps))
+               self.maxDepth=str(ans["maxDepth"])
+               self.cost=str(ans["cost"])
+               self.time = str(ans["time"])+ " s"
                self.tiles_grid = self.convert(self.steps[self.step])
                self.bool = True
-               self.buttons_list.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
-               self.buttons_list.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
+               self.buttons_list1=[]
+               self.buttons_list1.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
+               self.buttons_list1.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
                            #self.step+=1
                                
                self.draw_tiles()
@@ -73,6 +79,7 @@ class Game:
         self.all_sprites = pygame.sprite.Group()
         self.tiles_grid = self.convert(self.create_game())   
         self.buttons_list = []
+        self.buttons_list1 = []
         self.buttons_list.append(Button(500, 130, 200, 50, "Solve", MINTGREEN, BLACK,30))
         self.buttons_list.append(Button(500, 200, 200, 50, "Reset", MINTGREEN, BLACK,30))
         self.step = 0
@@ -90,12 +97,20 @@ class Game:
         self.user_text=''
         self.nodesExplored =''
         self.pathLength=''
+        self.maxDepth=''
+        self.cost=''
+        self.time=''
         self.base_font = pygame.font.SysFont("Consolas", 24)
         self.input_txt = pygame.Rect(500,80,140,32)
         font = pygame.font.SysFont("Consolas", 25)
+        self.invalid =''
+        self.invalid_text =font.render(self.invalid, True, MINTGREEN )
         self.text = font.render('Input', True, MINTGREEN )
         self.text_nodesExplored = font.render('Explored nodes:', True, MINTGREEN )
         self.text_pathLength = font.render('Path Length: ', True, MINTGREEN ) 
+        self.text_maxDepth = font.render('Max Depth: ', True, MINTGREEN )
+        self.text_cost = font.render('Cost: ', True, MINTGREEN )
+        self.text_time = font.render('Time: ', True, MINTGREEN )
         self.draw_tiles()
     def run(self):
         self.playing = True
@@ -119,26 +134,36 @@ class Game:
         self.draw_grid()
         for button in self.buttons_list:
             button.draw(self.screen)
-
+        for button in self.buttons_list1:
+            button.draw(self.screen)
         for box in self.boxes:
             box.render_checkbox()   
         pygame.draw.rect(self.screen,WHITE,self.input_txt,2)
         self.text_surface = self.base_font.render(self.user_text,True,(255,255,255))
         self.text_surface2 = self.base_font.render(self.nodesExplored,True,(255,255,255))
         self.text_surface3 = self.base_font.render(self.pathLength,True,(255,255,255))
+        self.text_surface6 = self.base_font.render(self.maxDepth,True,(255,255,255)) 
+        self.text_surface7 = self.base_font.render(self.cost,True,(255,255,255))
+        self.text_surface8 = self.base_font.render(self.time,True,(255,255,255))
         self.text_surface4 = self.base_font.render(" / "+str(len(self.steps)),True,(255,255,255))
         self.text_surface5 = self.base_font.render(str(self.step+1),True,(255,255,255))
 
         self.screen.blit(self.text_surface,(self.input_txt.x+5,self.input_txt.y+5))
-        
+        self.screen.blit(self.invalid_text,(500,200))
         self.screen.blit(self.text,(500,48))
         if self.bool:
            self.screen.blit(self.text_nodesExplored,(500,300))
            self.screen.blit(self.text_pathLength,(500,360))
+           self.screen.blit(self.text_maxDepth,(500,420))
+           self.screen.blit(self.text_cost,(500,480))
+           self.screen.blit(self.text_time,(500,540))
            self.screen.blit(self.text_surface2,(714,303))
            self.screen.blit(self.text_surface3,(670,362))
            self.screen.blit(self.text_surface4,(215, 467))
-           self.screen.blit(self.text_surface5,(185,467))           
+           self.screen.blit(self.text_surface5,(185,467)) 
+           self.screen.blit(self.text_surface6,(639,422)) 
+           self.screen.blit(self.text_surface7,(570,482)) 
+           self.screen.blit(self.text_surface8,(570,542))           
         self.input_txt.w = 200
         pygame.display.flip()
         
@@ -152,10 +177,23 @@ class Game:
                 quit(0)
             if event.type== pygame.MOUSEBUTTONDOWN:
               mouse_x, mouse_y = pygame.mouse.get_pos()
+              for button in self.buttons_list1:
+                if button.click(mouse_x, mouse_y):
+                       if button.text == "Step forward":
+                          
+                          if self.step < len(self.steps)-1:
+                             self.step+= 1
+                             self.tiles_grid = self.convert(self.steps[self.step])
+                             self.draw_tiles()
+                       if button.text == "Step back":  
+                            if self.step !=0: 
+                              self.step-= 1  
+                              self.tiles_grid = self.convert(self.steps[self.step])
+                              self.draw_tiles()                        
               for button in self.buttons_list:
                     if button.click(mouse_x, mouse_y):
                         if button.text == "Solve":
-                           
+                           self.step=0
                            for method in self.boxes:
                              if(method.checked == True): 
                                  
@@ -192,3 +230,4 @@ game  = Game()
 while True:
     game.new()
     game.run()
+    
