@@ -41,14 +41,22 @@ class Game:
         for method in self.boxes:
            if(method.checked == True):
              ans = ctrl.solve(method.caption,int(self.user_text))
+             if ans == "Invalid Input" :
+                self.new()
+             else:   
         #print(ctrl.solve("bfs", 876543889))  
-             self.steps = ans["path"]
-             print(ans["path"])
-             print(len(self.steps))
-             self.nodesExplored = str(ans["expanded"])
-             self.pathLength= str(len(self.steps))
-             self.tiles_grid = self.convert(self.steps[self.step])
-     
+               self.steps = ans["path"]
+               print(ans["path"])
+               print(len(self.steps))
+               self.nodesExplored = str(ans["expanded"])
+               self.pathLength= str(len(self.steps))
+               self.tiles_grid = self.convert(self.steps[self.step])
+               self.bool = True
+               self.buttons_list.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
+               self.buttons_list.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
+                           #self.step+=1
+                               
+               self.draw_tiles()
     def draw_tiles(self):
         row =0
         for col, x in enumerate(self.tiles_grid):
@@ -72,10 +80,12 @@ class Game:
         self.steps=[]
         button = Checkbox(self.screen , 800, 100, 0, caption='BFS' ,font_color= WHITE , font_size=30)
         button2 = Checkbox(self.screen, 800, 150, 1, caption='DFS' ,font_color= WHITE, font_size=30)
-        button3 = Checkbox(self.screen, 800, 200, 2, caption='A*',font_color= WHITE, font_size=30)
+        button3 = Checkbox(self.screen, 800, 200, 2, caption='A* Manhatten',font_color= WHITE, font_size=30)
+        button4 = Checkbox(self.screen, 800, 250, 2, caption='A* Euclidean',font_color= WHITE, font_size=30)
         self.boxes.append(button)
         self.boxes.append(button2)
         self.boxes.append(button3)
+        self.boxes.append(button4)
         self.bool = False
         self.user_text=''
         self.nodesExplored =''
@@ -150,12 +160,7 @@ class Game:
                              if(method.checked == True): 
                                  
                                self.solve(method.caption)
-                               self.bool = True
-                               self.buttons_list.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
-                               self.buttons_list.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
-                           #self.step+=1
-                               
-                               self.draw_tiles()
+                              
                         if button.text == "Reset":
                             self.new()
                         if button.text == "Step forward":
