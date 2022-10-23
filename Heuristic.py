@@ -7,6 +7,7 @@ class Heuristic:
                 sum = sum + abs(idx - (ord(c) - ord('0')))
         return sum
 
+
     def getEuclideanHeuristicCost(self, string):
         sum = 0
         for idx, c in enumerate(string):
@@ -24,8 +25,14 @@ class Heuristic:
                 sum = sum + currCost
         return sum
 
-    def getHeuristicCost(self,moveNum):
+
+    # returns hueristic cost when choice = 0 hueristic is manhattan and when it is 1 hueristic is euclidean
+    def getHeuristicCost(self,moveNum,choice):
         string = str(moveNum)
         if(moveNum<1000000000):
             string = '0' + string
-        return self.getManhattenHeuristicCost(string)
+
+        if(choice == 0):
+            return self.getManhattenHeuristicCost(string)
+        else:
+            return self.getEuclideanHeuristicCost(string)
