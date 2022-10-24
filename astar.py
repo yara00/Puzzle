@@ -26,8 +26,8 @@ class AStarSearch:
         self.maxDepth = 0
         h = Heuristic.Heuristic()
         # insert to frontier 2 data Structures
-        heappush(self.frontierHeap, (0, startingStateNum))
-        self.frontierDict[startingStateNum] = 0
+        heappush(self.frontierHeap, (h.getHeuristicCost(startingStateNum,hNum), startingStateNum))
+        self.frontierDict[startingStateNum] = h.getHeuristicCost(startingStateNum,hNum)
 
         # Set parent of first state to itself
         self.parentmap[startingStateNum] = (-1, 0)
