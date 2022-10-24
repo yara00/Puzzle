@@ -34,35 +34,47 @@ class Game:
         
         return grid    
     def solve (self,method):
-      #  print("Solve")
-      # print(method)
-        #self.step=0
+        self.solving=True
+        self.checkSol=False
+        self.screen.blit(self.solvingText,(590,48))                     
+        
+        pygame.display.flip()
+
         ctrl = Controller()
         for method in self.boxes:
            if(method.checked == True):
              ans = ctrl.solve(method.caption,int(self.user_text))
              if ans == "Invalid Input" :
-              #  self.new()
-                self.invalid='Invalid Input'
+                self.new()
+                self.solving=False
+                self.checkInv=True
+
+                self.user_text=''
              
              else:   
-        #print(ctrl.solve("bfs", 876543889))  
-               self.steps = ans["path"]
-               print(ans["path"])
-               print(len(self.steps))
-               self.nodesExplored = str(ans["expanded"])
-               self.pathLength= str(len(self.steps))
-               self.maxDepth=str(ans["maxDepth"])
-               self.cost=str(ans["cost"])
-               self.time = str(ans["time"])+ " s"
-               self.tiles_grid = self.convert(self.steps[self.step])
-               self.bool = True
-               self.buttons_list1=[]
-               self.buttons_list1.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
-               self.buttons_list1.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
-                           #self.step+=1
+      
+              self.steps = ans["path"]      
+              if len(self.steps)==0:
+                self.new()
+                self.solving=False
+                self.checkSol=True         
+              else:
+                 self.solving=False
+                 self.checkSol=False 
+                 self.checkInv=False
+                 self.nodesExplored = str(ans["expanded"])
+                 self.pathLength= str(len(self.steps))
+                 self.maxDepth=str(ans["maxDepth"])
+                 self.cost=str(ans["cost"])
+                 self.time = str(ans["time"])+ " s"
+                 self.tiles_grid = self.convert(self.steps[self.step])
+                 self.bool = True
+                 self.buttons_list1=[]
+                 self.buttons_list1.append(Button(330, 450, 100, 50, "Step forward", MINTGREEN, BLACK,15))
+                 self.buttons_list1.append(Button(50, 450, 100, 50, "Step back", MINTGREEN, BLACK,15))    
+                          
                                
-               self.draw_tiles()
+                 self.draw_tiles()
     def draw_tiles(self):
         row =0
         for col, x in enumerate(self.tiles_grid):
@@ -93,6 +105,9 @@ class Game:
         self.boxes.append(button2)
         self.boxes.append(button3)
         self.boxes.append(button4)
+        self.solving= False 
+        self.checkInv=False
+        self.checkSol=False
         self.bool = False
         self.user_text=''
         self.nodesExplored =''
@@ -103,9 +118,12 @@ class Game:
         self.base_font = pygame.font.SysFont("Consolas", 24)
         self.input_txt = pygame.Rect(500,80,140,32)
         font = pygame.font.SysFont("Consolas", 25)
-        self.invalid =''
-        self.invalid_text =font.render(self.invalid, True, MINTGREEN )
+        
+        
         self.text = font.render('Input', True, MINTGREEN )
+        self.noSolution=font.render('Has no solution', True, (220,20,60) )
+        self.Invalid=font.render('Invalid input!', True, (220,20,60) )
+        self.solvingText=font.render('Solving...', True, WHITE )
         self.text_nodesExplored = font.render('Explored nodes:', True, MINTGREEN )
         self.text_pathLength = font.render('Path Length: ', True, MINTGREEN ) 
         self.text_maxDepth = font.render('Max Depth: ', True, MINTGREEN )
@@ -149,7 +167,7 @@ class Game:
         self.text_surface5 = self.base_font.render(str(self.step+1),True,(255,255,255))
 
         self.screen.blit(self.text_surface,(self.input_txt.x+5,self.input_txt.y+5))
-        self.screen.blit(self.invalid_text,(500,200))
+        
         self.screen.blit(self.text,(500,48))
         if self.bool:
            self.screen.blit(self.text_nodesExplored,(500,300))
@@ -163,7 +181,13 @@ class Game:
            self.screen.blit(self.text_surface5,(185,467)) 
            self.screen.blit(self.text_surface6,(639,422)) 
            self.screen.blit(self.text_surface7,(570,482)) 
-           self.screen.blit(self.text_surface8,(570,542))           
+           self.screen.blit(self.text_surface8,(570,542))   
+        if self.checkSol:
+            self.screen.blit(self.noSolution,(500,300)) 
+        if self.checkInv:
+            self.screen.blit(self.Invalid,(500,25)) 
+        if self.solving:
+            self.screen.blit(self.solvingText,(590,48))                     
         self.input_txt.w = 200
         pygame.display.flip()
         
@@ -195,7 +219,7 @@ class Game:
                         if button.text == "Solve":
                            self.step=0
                            for method in self.boxes:
-                             if(method.checked == True): 
+                             if(method.checked == True and self.user_text != ''): 
                                  
                                self.solve(method.caption)
                               
